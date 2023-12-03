@@ -30,6 +30,7 @@ class A4SubmissionPlayer(GoEngine):
         """
         Starter code for assignment 4
         """
+        self.center_point = coord_to_point(4, 4, 7)
         GoEngine.__init__(self, "Go0", 1.0)
         self.time_limit = 1
 
@@ -40,8 +41,13 @@ class A4SubmissionPlayer(GoEngine):
             board.current_player = WHITE
         else:
             board.current_player = BLACK
-        winner, move = self.solve_board(board)
+        if board.get_empty_points().size == board.size * board.size and board.current_player == BLACK:
+            return format_point(point_to_coord(self.center_point, board.size)).lower()
+        ret=board.get_pattern_moves()
+        if ret is None:
+            winner, move = self.solve_board(board)
         return format_point(point_to_coord(self.best_move, self.board.size)).lower()
+    
     def alpha_beta(self, alpha, beta, depth):
         if time.time() - self.solve_start_time > (self.time_limit - 0.01):
             return 0, False, True
